@@ -1,0 +1,8 @@
+[package]
+name = "mycompression"
+version = "0.1.0"
+authors = ["Gabriel Pickl <peacemotion@gmail.com>"]
+
+[dependencies]
+getopts = "0.2"
+multi_reader = "0.1.0"
