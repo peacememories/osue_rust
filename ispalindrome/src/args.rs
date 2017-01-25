@@ -2,7 +2,7 @@ use getopts;
 use std::fmt;
 use getopts::Options;
 use getopts::Fail::UnrecognizedOption;
-use palindrome::PalindromeParser;
+use ::PalindromeParser;
 
 #[derive(Debug)]
 pub enum Fail {
@@ -53,8 +53,8 @@ pub fn parse<I: Iterator<Item=String>>(mut args: I) -> Result<PalindromeParser, 
         return Err(Fail::Help(opts.usage(&brief)))
     }
 
-    Ok(PalindromeParser::new(
-        matches.opt_present("i"),
-        matches.opt_present("s")
-    ))
+    Ok(PalindromeParser {
+        ignore_case: matches.opt_present("i"),
+        ignore_spaces: matches.opt_present("s")
+    })
 }
