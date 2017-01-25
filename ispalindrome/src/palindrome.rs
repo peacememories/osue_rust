@@ -14,25 +14,20 @@ impl PalindromeParser {
         }
     }
 
+    fn compare_iter<'a, I: 'a + Iterator<Item=(&'a str, &'a str)>>(&self, mut iter: I) -> bool {
+        if self.ignore_case {
+            iter.all(|(a, b)| a.to_lowercase() == b.to_lowercase())
+        } else {
+            iter.all(|(a, b)| a == b)
+        }
+    }
+
     pub fn parse_line(&self, line: &str) -> bool {
-        let comp_ci = |(a, b): (&str, &str)| {
-            a.to_lowercase() == b.to_lowercase()
-        };
-
-        let comp_cs = |(a,b): (&str, &str)| {
-            a == b
-        };
-
-        let comp: &Fn((&str, &str))->bool = if self.ignore_case {
-            &comp_ci
-        } else {
-            &comp_cs
-        };
-
+        let iter = UnicodeSegmentation::graphemes(line, true);
         if self.ignore_spaces {
-            UnicodeSegmentation::graphemes(line, true).filter(|&c| c != " ").self_zip().all(comp)
+            self.compare_iter(iter.filter(|&c| c != " ").self_zip())
         } else {
-            UnicodeSegmentation::graphemes(line, true).self_zip().all(comp)
+            self.compare_iter(iter.self_zip())
         }
     }
 }
