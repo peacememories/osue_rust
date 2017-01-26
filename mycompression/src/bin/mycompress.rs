@@ -1,8 +1,6 @@
 extern crate getopts;
 extern crate multi_reader;
 
-mod compress;
-
 use getopts::Options;
 use std::borrow::Cow;
 use std::fs::File;
@@ -23,7 +21,7 @@ macro_rules! panic_userfacing {
 }
 
 fn usage(program_name: &str, opts: &Options) -> String {
-    format!("{} [outfile...]", opts.short_usage(program_name))
+    format!("{} [infile...]", opts.short_usage(program_name))
 }
 
 fn main() {
@@ -53,7 +51,7 @@ fn main() {
         );
 
     if infiles.is_empty() {
-
+        
     } else {
         
     }
