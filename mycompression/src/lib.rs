@@ -7,6 +7,7 @@ pub struct Compressor<W> {
 }
 
 impl <W: Write> Compressor<W> {
+    #[inline]
     pub fn new(writer: W) -> Self {
         Compressor {
             last: None,
@@ -14,6 +15,7 @@ impl <W: Write> Compressor<W> {
         }
     }
 
+    #[inline]
     fn write_comp(&mut self, amount: usize, byte: u8) -> io::Result<()> {
         try!(write!(self.writer, "{}", amount));
         self.writer.write_all(&[byte])
@@ -21,6 +23,7 @@ impl <W: Write> Compressor<W> {
 }
 
 impl <W: Write> Write for Compressor<W> {
+    #[inline]
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         for byte in buf {
             match self.last.take() {
@@ -39,6 +42,7 @@ impl <W: Write> Write for Compressor<W> {
         Ok(buf.len())
     }
 
+    #[inline]
     fn flush(&mut self) -> io::Result<()> {
         match self.last.take() {
             Some((amount, byte)) => {
@@ -56,6 +60,7 @@ pub struct Counter<T> {
 }
 
 impl <T: Write> Counter<T> {
+    #[inline]
     pub fn new(writer: T) -> Self {
         Counter {
             writer: writer,
@@ -63,18 +68,21 @@ impl <T: Write> Counter<T> {
         }
     }
 
+    #[inline]
     pub fn written(&self) -> usize {
         self.written
     }
 }
 
 impl <T: Write> Write for Counter<T> {
+    #[inline]
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         let written = try!(self.writer.write(buf));
         self.written += written;
         Ok(written)
     }
 
+    #[inline]
     fn flush(&mut self) -> io::Result<()> {
         self.writer.flush()
     }
